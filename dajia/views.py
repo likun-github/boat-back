@@ -77,12 +77,12 @@ def verify(request):
         team=Team.objects.get(teamid=teamid)
         account = User.objects.filter(openid=openid,status=1).exists()
         if account:
-            return JsonResponse({'success':False, 'data': "该账号已注册"})
+            return JsonResponse("该账号已注册")
         else:
             newuser = User(openid=openid, team=team,department=department,name=name, number=number, telephone=telephone,status=1)
             newuser.save()
             data=serializer(newuser)
-            return JsonResponse({'success': True,'data':data})
+            return JsonResponse(data)
 
 #首页认证
 #成功,返回当前类别砍价最多以及参团人数最多
