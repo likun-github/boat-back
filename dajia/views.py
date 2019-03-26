@@ -52,31 +52,28 @@ def login(request):
         response = r.json()
         print(response)
         openid = response['openid']
-
         account = User.objects.filter(openid=openid).exists()
         if account:
             newaccount=User.objects.get(openid=openid)
             back=serializer(newaccount)
-            return JsonResponse({'success':True, 'data': back})
+            return JsonResponse(back)
         else:
-            teamid = '0000000'
-            team=Team.objects.get(teamid=teamid)
-            newaccount=User(openid=openid,team=team,number=0,department=0,telephone=0,name=name,status=0)
+            newaccount=User(openid=openid,name=name,status=0)
             newaccount.save()
             back = serializer(newaccount)
-            return JsonResponse({'success': True, 'data': back})
+            return JsonResponse(back)
 
 #实名认证验证通过
 #未注册给定注册以及返回数据
 #已注册返回该账户已注册
 def verify(request):
     if request.method == 'GET':
-        openid=request.GET.get('openid','')
-        teamid=request.GET.get('teamid','')
-        name = request.GET.get('name', '')
-        department = request.GET.get('department', '')
-        telephone = request.GET.get('telephone', '')
-        number = request.GET.get('number', '')
+        openid=request.GET.get('openid','')#openid
+        teamid=request.GET.get('teamid','')#teamid
+        name = request.GET.get('name', '')#姓名
+        number = request.GET.get('number', '')  # 学号
+        department = request.GET.get('department', '')#院系
+        telephone = request.GET.get('telephone', '')#电话号码
         team=Team.objects.get(teamid=teamid)
         account = User.objects.filter(openid=openid,status=1).exists()
         if account:

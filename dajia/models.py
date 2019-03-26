@@ -7,19 +7,19 @@ class Team(models.Model):
     time = models.DateTimeField(auto_now_add=True, verbose_name="期表创建时间")
     class Meta:
         get_latest_by = "time"
-
 class User(models.Model):
     openid=models.CharField(max_length=100,primary_key=True,verbose_name="唯一身份标识openid")
-    team=models.ForeignKey(Team,on_delete=models.CASCADE)
-    number=models.CharField(max_length=15,verbose_name="学号")
-    name=models.CharField(max_length=30,verbose_name="姓名")
-    telephone=models.CharField(max_length=11,verbose_name="联系方式")
-    department=models.CharField(max_length=20,verbose_name="学院")
+    name = models.CharField(max_length=30, verbose_name="姓名")
     CHOICE = (
         (0, "未实名认证"),
         (1, "实名认证通过"),
     )
     status = models.IntegerField(choices=CHOICE, verbose_name="是否完成实名认证")
+    number=models.CharField(null=True, blank=True,max_length=15,verbose_name="学号")
+    telephone=models.CharField(null=True, blank=True,max_length=11,verbose_name="联系方式")
+    department=models.CharField(null=True, blank=True,max_length=20,verbose_name="学院")
+    team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
+
 
 class Merchant(models.Model):
     merchantid=models.CharField(primary_key=True,max_length=10,verbose_name="商家id")
@@ -82,8 +82,9 @@ class Periodtoteam(models.Model):
     period=models.ForeignKey(Period,on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     cutprice = models.IntegerField(verbose_name="降价")
-    maxcutprice=models.FloatField(verbose_name="当前最多砍价金额")
     number = models.IntegerField(verbose_name="参团人数")
+    cutnumber=models.IntegerField(verbose_name="砍价人次")
+    saveprie=models.FloatField(verbose_name="累计节省")
     CHOICE = (
         (1, "健身"),
         (2, "驾校"),
