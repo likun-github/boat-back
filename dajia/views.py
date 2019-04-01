@@ -198,9 +198,10 @@ def comment(request):
             commenModel=Comment(commentid=commentid,context=context,user=user,order=order,status=0, \
                                 production=order.production)
             nowtime = timezone.now()
-            order.time5 = nowtime
-            order.save()
             commenModel.save()
+            order.time5 = nowtime
+            order.comment=commenModel
+            order.save()
         return JsonResponse({'success': True})
 #给定openid,teamid,
 #验证成功
@@ -216,30 +217,24 @@ def buyalone(request):
 
         now = datetime.datetime.now()
         timeid = now.strftime('%Y%m%d%H%M%S')  # str类型,当前时间，年月日时分秒
-        # periodtoteam = Periodtoteam.objects.get(team_id=teamid, period_id=periodid)
-        # #差价初值
-        # initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
-        #
-        # price = random.randint(int(0.1*initial), int(0.14*initial))  # 砍价金额
-        # steamid = openid + timeid
-        # orderid = openid + timeid
-        # steam = Steam(steamid=steamid, cutprice=price, steamnumber=1)
-        # periodtoteam.number = periodtoteam.number + 1
-        # #每人砍价
-        # print(price)
-        # print(periodtoteam.number)
-        # if periodtoteam.number<=100:
-        #     cutprice = 0.001 * initial
-        #     periodtoteam.cutprice += cutprice
-        #     print(periodtoteam.cutprice)
-        # if price>periodtoteam.maxcutprice:
-        #     periodtoteam.maxcutprice=price
-        # periodtoteam.save()
-        # steam.save()
-        # order = Order(orderid=orderid, user=user, period=period, status=1, steam=steam, cutprice=price,
-        #               production=period.production)
-        # order.save()
-        # return JsonResponse({'success': True, 'reason': '参团成功', 'price': price})
+        initial=period.startprice-period.bottomprice
+
+        price = random.randint(int(0.1*initial), int(0.14*initial))  # 砍价金额
+        steamid = openid + timeid
+        orderid = openid + timeid
+        steam = Steam(steamid=steamid, cutprice=price, steamnumber=1)
+        period.number = period.number + 1
+        #每人砍价
+        if period.number<=100:
+            cutprice = 0.001 * initial
+            period.cutprice += cutprice
+            print(period.cutprice)
+        period.save()
+        steam.save()
+        order = Order(orderid=orderid, user=user, period=period, status=1, steam=steam, cutprice=price,
+                      production=period.production)
+        order.save()
+        return JsonResponse({'success': True, 'reason': '参团成功', 'price': price})
 def buytogether(request):
     teamid = request.GET.get('teamid', '')
     openid = request.GET.get('openid', '')
@@ -249,30 +244,27 @@ def buytogether(request):
     user = User.objects.get(openid=openid)
     now = datetime.datetime.now()
     timeid = now.strftime('%Y%m%d%H%M%S')  # str类型,当前时间，年月日时分秒
-    # periodtoteam = Periodtoteam.objects.get(team_id=teamid, period_id=periodid)
-    # # 差价初值
-    # initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
-    # price = random.randint(int(0.1 * initial), int(0.14 * initial))  # 砍价金额
-    # orderid = openid + timeid
-    # steam = Steam.objects.get(steamid=steamid)
-    # if steam.steamnumber <= 4:
-    #     steam.steamnumber = steam.steamnumber + 1
-    #     steam.cutprice += price
-    #     order = Order(orderid=orderid, user=user, period=period, status=1, steam=steam, cutprice=price,
-    #                   production=period.production)
-    #     periodtoteam.number = periodtoteam.number + 1
-    #     if periodtoteam.number <= 100:
-    #         initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
-    #         cutprice = 0.0001 * initial
-    #         periodtoteam.cutprice += cutprice
-    #     if steam.cutprice>periodtoteam.maxcutprice:
-    #         periodtoteam.maxcutprice=price
-    #     steam.save()
-    #     order.save()
-    #     periodtoteam.save()
-    #     return JsonResponse({'success': True, 'reason': '参团成功', 'price': price})
-    # else:
-    #     return JsonResponse({'success': False, 'reason': '团队人数已满'})
+    # 差价初值
+    initial = period.startprice - period.bottomprice
+    price = random.randint(int(0.1 * initial), int(0.14 * initial))  # 砍价金额
+    orderid = openid + timeid
+    steam = Steam.objects.get(steamid=steamid)
+
+    if steam.steamnumber <= 4:
+        steam.steamnumber = steam.steamnumber + 1
+        steam.cutprice += price
+        steam.save()
+        order = Order(orderid=orderid, user=user, period=period, status=1, steam=steam, cutprice=price,
+                      production=period.production)
+        period.number = period.number + 1
+        if period.number <= 100:
+            cutprice = 0.0001 * initial
+            period.cutprice += cutprice
+        order.save()
+        period.save()
+        return JsonResponse({'success': True, 'reason': '参团成功', 'price': price})
+    else:
+        return JsonResponse({'success': False, 'reason': '团队人数已满'})
 
 
 

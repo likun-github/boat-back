@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8b7f819-22c7-4f44-8bff-e8296afdc948" name="Default Changelist" comment="new">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dajia/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/dajia/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dajia/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dajia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/dajia/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -68,14 +65,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1217" />
+          <entry key="py" value="1273" />
           <entry key="txt" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="11" />
-          <entry key="Python" value="1217" />
+          <entry key="Python" value="1273" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -130,14 +127,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dajia/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="676">
-              <caret line="318" column="9" selection-start-line="318" selection-start-column="9" selection-end-line="318" selection-end-column="9" />
+            <state relative-caret-position="429">
+              <caret line="203" column="24" selection-start-line="203" selection-start-column="24" selection-end-line="203" selection-end-column="24" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
-                <marker date="1554127831064" expanded="true" signature="724:999" ph="..." />
-                <marker date="1554127831064" expanded="true" signature="1018:2101" ph="..." />
-                <marker date="1554127831064" expanded="true" signature="6599:7947" ph="..." />
-                <marker date="1554127831064" expanded="true" signature="12212:12215" ph="..." />
+                <marker date="1554128713510" expanded="true" signature="724:999" ph="..." />
+                <marker date="1554128713510" expanded="true" signature="1018:2101" ph="..." />
+                <marker date="1554128713510" expanded="true" signature="6599:7947" ph="..." />
+                <marker date="1554128713510" expanded="true" signature="11524:11527" ph="..." />
               </folding>
             </state>
           </provider>
@@ -386,7 +383,7 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24463807" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24463807" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -400,7 +397,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32907802" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.1300268" side_tool="true" weight="0.04249292" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.48123324" visible="true" weight="0.41843972" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.48123324" visible="true" weight="0.13333334" />
       <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49396783" weight="0.19858156" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -574,14 +571,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dajia/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="676">
-          <caret line="318" column="9" selection-start-line="318" selection-start-column="9" selection-end-line="318" selection-end-column="9" />
+        <state relative-caret-position="429">
+          <caret line="203" column="24" selection-start-line="203" selection-start-column="24" selection-end-line="203" selection-end-column="24" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-            <marker date="1554127831064" expanded="true" signature="724:999" ph="..." />
-            <marker date="1554127831064" expanded="true" signature="1018:2101" ph="..." />
-            <marker date="1554127831064" expanded="true" signature="6599:7947" ph="..." />
-            <marker date="1554127831064" expanded="true" signature="12212:12215" ph="..." />
+            <marker date="1554128713510" expanded="true" signature="724:999" ph="..." />
+            <marker date="1554128713510" expanded="true" signature="1018:2101" ph="..." />
+            <marker date="1554128713510" expanded="true" signature="6599:7947" ph="..." />
+            <marker date="1554128713510" expanded="true" signature="11524:11527" ph="..." />
           </folding>
         </state>
       </provider>
