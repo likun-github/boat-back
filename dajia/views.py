@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 from django.db.models import Count
 from django.db.models import Max
 from django.db.models import Sum
-from .models import User,Team,Steam,Cutting,Periodtoteam
+from .models import User,Team,Steam,Cutting
 from .models import Order
 from .models import Comment
 from .models import Period
@@ -88,12 +88,17 @@ def verify(request):
 #成功,返回当前类别砍价最多以及参团人数最多
 def home(request):
     if request.method == 'GET':
+        pass
         teamid=request.GET.get('teamid','')
-        home = Periodtoteam.objects.filter(team_id=teamid).values('type').annotate(sum=Sum('number'), max=Max('maxcutprice')).values("type", \
-                                                                                                                  'sum', \
-                                                                                                                  'max')
+        home=Period.objects.filter(production__team_id=teamid,status=1).values('periodid','production','endtime','type','number')
         home=serializer(home)
-        return JsonResponse({'success': True,'data':home})
+        return JsonResponse(home)
+        # teamid=request.GET.get('teamid','')
+        # home = Periodtoteam.objects.filter(team_id=teamid).values('type').annotate(sum=Sum('number'), max=Max('maxcutprice')).values("type", \
+        #                                                                                                           'sum', \
+        #                                                                                                           'max')
+        # home=serializer(home)
+        # return JsonResponse({'success': True,'data':home})
 
 #开始测试第二页接口
 #给定teamid，type查询内容
@@ -105,12 +110,13 @@ def secondpage(request):
         teamid=request.GET.get('teamid','')
         #选择最近的一期
         nowtime=timezone.now()
-        peroidtoteams=Periodtoteam.objects.filter(type=type,team_id=teamid,period__status=1).values( "period__periodid", \
-                                                 "period__production__name","period__production__merchant__logo","period__production__merchant__latitude", \
-                                                 "period__production__merchant__longitude","period__production__merchant__location","period__production__reputation", \
-                                                "period__startprice","maxcutprice","number","period__production__merchant__pic1")
-        data=serializer(peroidtoteams)
-        return JsonResponse({'success': True, 'data': data})
+        pass
+        # peroidtoteams=Periodtoteam.objects.filter(type=type,team_id=teamid,period__status=1).values( "period__periodid", \
+        #                                          "period__production__name","period__production__merchant__logo","period__production__merchant__latitude", \
+        #                                          "period__production__merchant__longitude","period__production__merchant__location","period__production__reputation", \
+        #                                         "period__startprice","maxcutprice","number","period__production__merchant__pic1")
+        # data=serializer(peroidtoteams)
+        # return JsonResponse({'success': True, 'data': data})
 
 
 #详情页接口返回评论
@@ -119,7 +125,8 @@ def thirdpage(request):
     if request.method == 'GET':
         periodid=request.GET.get('periodid','')
         period=Period.objects.get(periodid=periodid)
-        comments=Comment.objects.filter(production_id=period.production_id,status=1).values("user__team__logo","user__name","context","time").all()[0,5]
+        comments=Comment.objects.filter(production_id=period.production_id,status=1).values("user__team__logo", \
+                                                                                            "user__name","context","time").all()[0,5]
         comments=serializer(comments)
         return JsonResponse({'success': True, 'data': comments})
 def scancomment(request):
@@ -127,7 +134,8 @@ def scancomment(request):
         number=request.GET.get('number','')
         periodid = request.GET.get('periodid', '')
         period = Period.objects.get(periodid=periodid)
-        comments = Comment.objects.filter(production_id=period.production_id, status=1).values("user__team__logo", "user__name", "context", "time").all()[number, number+5]
+        comments = Comment.objects.filter(production_id=period.production_id, status=1).values("user__team__logo",  \
+                                                                                               "user__name", "context", "time").all()[number, number+5]
         comments = serializer(comments)
         return JsonResponse({'success': True, 'data': comments})
 #查询我的订单
@@ -135,8 +143,10 @@ def scancomment(request):
 def orderinformation(request):
     if request.method == 'GET':
         openid=request.GET.get('openid','')
-        orders=Order.objects.filter(user_id=openid).values('orderid','period__endtime','status','production__name','production__merchant__longitude', \
-                                                           'production__merchant__latitude','production__merchant__logo','production__reputation',"steam__cutprice" \
+        orders=Order.objects.filter(user_id=openid).values('orderid','period__endtime','status','production__name', \
+                                                           'production__merchant__longitude', \
+                                                           'production__merchant__latitude','production__merchant__logo', \
+                                                           'production__reputation',"steam__cutprice" \
                                                            )
         orders=serializer(orders)
         return JsonResponse({'success':True,'data':orders})
@@ -146,14 +156,20 @@ def orderdetail(request):
     if request.method == 'GET':
         teamid=request.GET.get('teamid','')
         orderid=request.GET.get('orderid','')
-        order=Order.objects.get(orderid=orderid)
-        period=Periodtoteam.objects.filter(team_id=teamid,period_id=order.production_id).values("period__startprice","cutprice","number","period__endtime")
-        onecut=Order.objects.filter(steam_id=order.steam_id).values("user__name","cutprice")
-        twocut=Cutting.objects.filter(steam_id=order.steam_id).values("audience__name","cutprice")
-        period=serializer(period)
+        order=Order.objects.filter(orderid=orderid).values('production__merchant__logo','production__name', \
+                                                           'production__merchant__latitude', \
+                                                           'production__merchant__longitude', \
+                                                           'production__reputation','period__number','period__status', \
+                                                           'period__endtime', \
+                                                           'period__startprice','period__cutprice','steam_id')
+        onecut=Steam.objects.filter(steamid=order.steam_id).values('order__user__picture','order__user__name', \
+                                                                   'order__cutprice')
+        twocut =Steam.objects.filter(steamid=order.steam_id).values('cutting__audience__picture', \
+                                                                    'cutting__audience__name','cutting__cutprice')
+        order=serializer(order)
         onecut=serializer(onecut)
         twocut=serializer(twocut)
-        return JsonResponse({"period":period,'oncut':onecut,'twocut':twocut})
+        return JsonResponse({"period":order,'oncut':onecut,'twocut':twocut})
 #对取消接口进行验证
 #取消接口验证完成
 def cancel(request):
@@ -179,7 +195,8 @@ def comment(request):
             comment1.context=context
             comment1.save()
         else:
-            commenModel=Comment(commentid=commentid,context=context,user=user,order=order,status=0,production=order.production)
+            commenModel=Comment(commentid=commentid,context=context,user=user,order=order,status=0, \
+                                production=order.production)
             nowtime = timezone.now()
             order.time5 = nowtime
             order.save()
@@ -199,30 +216,30 @@ def buyalone(request):
 
         now = datetime.datetime.now()
         timeid = now.strftime('%Y%m%d%H%M%S')  # str类型,当前时间，年月日时分秒
-        periodtoteam = Periodtoteam.objects.get(team_id=teamid, period_id=periodid)
-        #差价初值
-        initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
-
-        price = random.randint(int(0.1*initial), int(0.14*initial))  # 砍价金额
-        steamid = openid + timeid
-        orderid = openid + timeid
-        steam = Steam(steamid=steamid, cutprice=price, steamnumber=1)
-        periodtoteam.number = periodtoteam.number + 1
-        #每人砍价
-        print(price)
-        print(periodtoteam.number)
-        if periodtoteam.number<=100:
-            cutprice = 0.001 * initial
-            periodtoteam.cutprice += cutprice
-            print(periodtoteam.cutprice)
-        if price>periodtoteam.maxcutprice:
-            periodtoteam.maxcutprice=price
-        periodtoteam.save()
-        steam.save()
-        order = Order(orderid=orderid, user=user, period=period, status=1, steam=steam, cutprice=price,
-                      production=period.production)
-        order.save()
-        return JsonResponse({'success': True, 'reason': '参团成功', 'price': price})
+        # periodtoteam = Periodtoteam.objects.get(team_id=teamid, period_id=periodid)
+        # #差价初值
+        # initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
+        #
+        # price = random.randint(int(0.1*initial), int(0.14*initial))  # 砍价金额
+        # steamid = openid + timeid
+        # orderid = openid + timeid
+        # steam = Steam(steamid=steamid, cutprice=price, steamnumber=1)
+        # periodtoteam.number = periodtoteam.number + 1
+        # #每人砍价
+        # print(price)
+        # print(periodtoteam.number)
+        # if periodtoteam.number<=100:
+        #     cutprice = 0.001 * initial
+        #     periodtoteam.cutprice += cutprice
+        #     print(periodtoteam.cutprice)
+        # if price>periodtoteam.maxcutprice:
+        #     periodtoteam.maxcutprice=price
+        # periodtoteam.save()
+        # steam.save()
+        # order = Order(orderid=orderid, user=user, period=period, status=1, steam=steam, cutprice=price,
+        #               production=period.production)
+        # order.save()
+        # return JsonResponse({'success': True, 'reason': '参团成功', 'price': price})
 def buytogether(request):
     teamid = request.GET.get('teamid', '')
     openid = request.GET.get('openid', '')
@@ -232,30 +249,30 @@ def buytogether(request):
     user = User.objects.get(openid=openid)
     now = datetime.datetime.now()
     timeid = now.strftime('%Y%m%d%H%M%S')  # str类型,当前时间，年月日时分秒
-    periodtoteam = Periodtoteam.objects.get(team_id=teamid, period_id=periodid)
-    # 差价初值
-    initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
-    price = random.randint(int(0.1 * initial), int(0.14 * initial))  # 砍价金额
-    orderid = openid + timeid
-    steam = Steam.objects.get(steamid=steamid)
-    if steam.steamnumber <= 4:
-        steam.steamnumber = steam.steamnumber + 1
-        steam.cutprice += price
-        order = Order(orderid=orderid, user=user, period=period, status=1, steam=steam, cutprice=price,
-                      production=period.production)
-        periodtoteam.number = periodtoteam.number + 1
-        if periodtoteam.number <= 100:
-            initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
-            cutprice = 0.0001 * initial
-            periodtoteam.cutprice += cutprice
-        if steam.cutprice>periodtoteam.maxcutprice:
-            periodtoteam.maxcutprice=price
-        steam.save()
-        order.save()
-        periodtoteam.save()
-        return JsonResponse({'success': True, 'reason': '参团成功', 'price': price})
-    else:
-        return JsonResponse({'success': False, 'reason': '团队人数已满'})
+    # periodtoteam = Periodtoteam.objects.get(team_id=teamid, period_id=periodid)
+    # # 差价初值
+    # initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
+    # price = random.randint(int(0.1 * initial), int(0.14 * initial))  # 砍价金额
+    # orderid = openid + timeid
+    # steam = Steam.objects.get(steamid=steamid)
+    # if steam.steamnumber <= 4:
+    #     steam.steamnumber = steam.steamnumber + 1
+    #     steam.cutprice += price
+    #     order = Order(orderid=orderid, user=user, period=period, status=1, steam=steam, cutprice=price,
+    #                   production=period.production)
+    #     periodtoteam.number = periodtoteam.number + 1
+    #     if periodtoteam.number <= 100:
+    #         initial = periodtoteam.period.startprice - periodtoteam.period.bottomprice
+    #         cutprice = 0.0001 * initial
+    #         periodtoteam.cutprice += cutprice
+    #     if steam.cutprice>periodtoteam.maxcutprice:
+    #         periodtoteam.maxcutprice=price
+    #     steam.save()
+    #     order.save()
+    #     periodtoteam.save()
+    #     return JsonResponse({'success': True, 'reason': '参团成功', 'price': price})
+    # else:
+    #     return JsonResponse({'success': False, 'reason': '团队人数已满'})
 
 
 
@@ -298,8 +315,8 @@ def period_save(sender,**kwargs):
     period=Period.objects.latest()
     for team in teams:
         id=team.teamid+period.periodid
-        periodtoteam=Periodtoteam(Periodtoteamid=id,team=team,period=period,type=period.type,cutprice=0,maxcutprice=0,number=0)
-        periodtoteam.save()
+        # periodtoteam=Periodtoteam(Periodtoteamid=id,team=team,period=period,type=period.type,cutprice=0,maxcutprice=0,number=0)
+        # periodtoteam.save()
 
 
 @receiver(post_save,sender=Team,dispatch_uid="team_save")
@@ -309,9 +326,9 @@ def team_save(sender,**kwargs):
     team=Team.objects.latest()
     for period in periods:
         id = team.teamid + period.periodid
-        periodtoteam = Periodtoteam(Periodtoteamid=id, team=team, period=period, type=period.type, cutprice=0,
-                                     maxcutprice=0, number=0)
-        periodtoteam.save()
+        # periodtoteam = Periodtoteam(Periodtoteamid=id, team=team, period=period, type=period.type, cutprice=0,
+        #                              maxcutprice=0, number=0)
+        # periodtoteam.save()
 
 
 
