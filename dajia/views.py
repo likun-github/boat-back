@@ -90,15 +90,10 @@ def home(request):
     if request.method == 'GET':
         pass
         teamid=request.GET.get('teamid','')
-        home=Period.objects.filter(production__team_id=teamid,status=1).values('periodid','production','endtime','type','number')
+        home=Period.objects.filter(production__team_id=teamid,status=1).values('periodid','production','endtime','type', \
+                                                                               'number')
         home=serializer(home)
         return JsonResponse(home)
-        # teamid=request.GET.get('teamid','')
-        # home = Periodtoteam.objects.filter(team_id=teamid).values('type').annotate(sum=Sum('number'), max=Max('maxcutprice')).values("type", \
-        #                                                                                                           'sum', \
-        #                                                                                                           'max')
-        # home=serializer(home)
-        # return JsonResponse({'success': True,'data':home})
 
 #开始测试第二页接口
 #给定teamid，type查询内容
@@ -177,6 +172,8 @@ def cancel(request):
         orderid=request.GET.get('orderid','')
         order=Order.objects.get(orderid=orderid)
         order.status=0
+        nowtime = timezone.now()
+        order.time6 = nowtime
         order.save()
         return JsonResponse({'success':True})
 #评论
@@ -212,13 +209,9 @@ def buyalone(request):
         periodid = request.GET.get('periodid', '')
         period = Period.objects.get(periodid=periodid)
         user = User.objects.get(openid=openid)
-
-
-
         now = datetime.datetime.now()
         timeid = now.strftime('%Y%m%d%H%M%S')  # str类型,当前时间，年月日时分秒
         initial=period.startprice-period.bottomprice
-
         price = random.randint(int(0.1*initial), int(0.14*initial))  # 砍价金额
         steamid = openid + timeid
         orderid = openid + timeid
