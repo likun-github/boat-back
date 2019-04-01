@@ -10,6 +10,7 @@ class Team(models.Model):
 class User(models.Model):
     openid=models.CharField(max_length=100,primary_key=True,verbose_name="唯一身份标识openid")
     name = models.CharField(max_length=30, verbose_name="姓名")
+    picture = models.ImageField(upload_to="userpic", verbose_name="微信头像")
     CHOICE = (
         (0, "未实名认证"),
         (1, "实名认证通过"),
@@ -19,7 +20,6 @@ class User(models.Model):
     telephone=models.CharField(null=True, blank=True,max_length=11,verbose_name="联系方式")
     department=models.CharField(null=True, blank=True,max_length=20,verbose_name="学院")
     team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
-
 
 class Merchant(models.Model):
     merchantid=models.CharField(primary_key=True,max_length=10,verbose_name="商家id")
@@ -98,6 +98,28 @@ class Steam(models.Model):
     time = models.DateTimeField(auto_now_add=True, verbose_name="团队创建时间")
     cutprice=models.FloatField(verbose_name="团队整体优惠价格")
     steamnumber=models.IntegerField(verbose_name="团队人数")
+    master=models.ForeignKey(User,null=True, blank=True, on_delete=models.SET_NULL)
+    member1 = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    member2 = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    member3 = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    member4r = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+
+
+
+
+class Comment(models.Model):
+    commentid=models.CharField(max_length=50,primary_key=True,verbose_name="评论id")
+    production=models.ForeignKey(Production,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    context=models.CharField(max_length=200,verbose_name="评论")
+    time=models.DateTimeField(auto_now_add=True,verbose_name="评论时间")
+    CHOICE = (
+        (0, "未核查"),
+        (1, "已核查"),
+    )
+    status=models.IntegerField(default=0,choices=CHOICE,verbose_name="是否审核")
+
+
 
 class Order(models.Model):
     orderid=models.CharField(max_length=50,primary_key=True,verbose_name="订单编号")
@@ -121,6 +143,7 @@ class Order(models.Model):
     time3 = models.DateTimeField(null=True, blank=True, verbose_name="支付完成时间")
     time4 = models.DateTimeField(null=True, blank=True, verbose_name="订单完成时间")
     time5 = models.DateTimeField(null=True, blank=True, verbose_name="评价完成时间")
+    comment=models.ForeignKey(Comment,on_delete=models.CASCADE)
 
 class Cutting(models.Model):
     cutid=models.CharField(primary_key=True,max_length=50,verbose_name="砍价编号")
@@ -129,20 +152,7 @@ class Cutting(models.Model):
     cutprice=models.FloatField(verbose_name="砍价")
     time = models.DateTimeField(auto_now_add=True, verbose_name="砍价时间")
 
-class Comment(models.Model):
-    commentid=models.CharField(max_length=50,primary_key=True,verbose_name="评论id")
-    order=models.ForeignKey(Order,on_delete=models.CASCADE)#谁在评论
-    production=models.ForeignKey(Production,on_delete=models.CASCADE)
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    context=models.CharField(max_length=200,verbose_name="评论")
-    time=models.DateTimeField(auto_now_add=True,verbose_name="评论时间")
-    CHOICE = (
-        (0, "未核查"),
-        (1, "已核查"),
-    )
-    status=models.IntegerField(default=0,choices=CHOICE,verbose_name="是否审核")
-    class Meta:
-        ordering=["order__period","-time"]
+
 
 
 
