@@ -19,7 +19,7 @@ class User(models.Model):
     number=models.CharField(null=True, blank=True,max_length=15,verbose_name="学号")
     telephone=models.CharField(null=True, blank=True,max_length=11,verbose_name="联系方式")
     department=models.CharField(null=True, blank=True,max_length=20,verbose_name="学院")
-    team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
+    team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL,related_name="user")#外键连接名称
 
 class Merchant(models.Model):
     merchantid=models.CharField(primary_key=True,max_length=10,verbose_name="商家id")
@@ -42,7 +42,7 @@ class Merchant(models.Model):
 
 class  Production(models.Model):
     productionid=models.IntegerField(primary_key=True,verbose_name="产品id")
-    merchant=models.ForeignKey(Merchant,on_delete=models.CASCADE)
+    merchant=models.ForeignKey(Merchant,on_delete=models.CASCADE,related_name="production")
     name=models.CharField(max_length=20,verbose_name="产品名称")
     reputation=models.IntegerField(verbose_name="产品评分")
     CHOICE = (
@@ -51,11 +51,12 @@ class  Production(models.Model):
         (3, "考研"),
         (4, "小语种"),
     )
+    introduciton=models.ImageField(upload_to="production",verbose_name="产品介绍")
     type = models.IntegerField(choices=CHOICE, verbose_name="产品类别")
 
 class Period(models.Model):
     periodid=models.CharField(primary_key=True,max_length=50,verbose_name="期表id")
-    production=models.ForeignKey(Production,on_delete=models.CASCADE)
+    production=models.ForeignKey(Production,on_delete=models.CASCADE,related_name="period")
     starttime=models.DateTimeField(verbose_name="起始时间")
     endtime=models.DateTimeField(verbose_name="结束时间")
     startprice=models.IntegerField(verbose_name="初始价格")
@@ -79,8 +80,8 @@ class Period(models.Model):
 
 class Periodtoteam(models.Model):
     Periodtoteamid=models.CharField(max_length=50,verbose_name="期表和大团队对应id")
-    period=models.ForeignKey(Period,on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    period=models.ForeignKey(Period,on_delete=models.CASCADE,related_name="periodtoteam")
+    team = models.ForeignKey(Team, on_delete=models.CASCADE,related_name="periodtoteam")
     cutprice = models.IntegerField(verbose_name="降价")
     number = models.IntegerField(verbose_name="参团人数")
     cutnumber=models.IntegerField(verbose_name="砍价人次")
@@ -99,10 +100,7 @@ class Steam(models.Model):
     cutprice=models.FloatField(verbose_name="团队整体优惠价格")
     steamnumber=models.IntegerField(verbose_name="团队人数")
     master=models.ForeignKey(User,null=True, blank=True, on_delete=models.SET_NULL)
-    member1 = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
-    member2 = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
-    member3 = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
-    member4r = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+
 
 
 
