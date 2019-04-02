@@ -74,9 +74,6 @@ def login(request):
 
 
 
-#实名认证验证通过
-#未注册给定注册以及返回数据
-#已注册返回该账户已注册
 def verify(request):
     if request.method == 'GET':
         openid=request.GET.get('openid','')#openid
@@ -88,7 +85,7 @@ def verify(request):
         team=Team.objects.get(teamid=teamid)
         account = User.objects.filter(openid=openid,status=1).exists()
         if account:
-            return JsonResponse("该账号已注册")
+            return JsonResponse("账号已存在",safe=False)
         else:
             account = User.objects.get(openid=openid)
             account.name = name
@@ -98,7 +95,7 @@ def verify(request):
             account.status = 1
             account.team = team
             account.save()
-            return JsonResponse("true")
+            return JsonResponse("success",safe=False)
 
 
 #首页认证
@@ -112,10 +109,7 @@ def home(request):
         home=serializer(home)
         return JsonResponse(home)
 
-#开始测试第二页接口
-#给定teamid，type查询内容
-#对datetime中用serializer库进行序列化用返回
-#成功
+
 def secondpage(request):
     if request.method == 'GET':
         type=request.GET.get('type','')
@@ -123,11 +117,6 @@ def secondpage(request):
         #选择最近的一期
         nowtime=timezone.now()
         pass
-
-
-
-#详情页接口返回评论
-#无足够评论信息，跳过
 def thirdpage(request):
     if request.method == 'GET':
         periodid=request.GET.get('periodid','')
@@ -146,61 +135,8 @@ def scancomment(request):
         comments = serializer(comments)
         return JsonResponse({'success': True, 'data': comments})
 
-#查询订单细节
-#接口正常运行，细节的雕琢
-def order(request):
-    if request.method == 'GET':
-        openid = request.GET.get('openid', '')
-        order=Order.objects.filter(user_id=openid).values('production__merchant__logo','production__name', \
-                                                           'production__merchant__latitude', \
-                                                           'production__merchant__longitude', \
-                                                           'production__reputation','period__number','period__status', \
-                                                           'period__endtime', \
-                                                           'period__startprice','period__cutprice','steam_id')
-        onecut=Steam.objects.filter(steamid=order.steam_id).values('steamid','order__user__picture','order__user__name', \
-                                                                   'order__cutprice')
-        twocut =Steam.objects.filter(steamid=order.steam_id).values('steamid','cutting__audience__picture', \
-                                                                    'cutting__audience__name','cutting__cutprice')
-        order=serializer(order)
-        onecut=serializer(onecut)
-        twocut=serializer(twocut)
-        return JsonResponse({"period":order,'oncut':onecut,'twocut':twocut})
-#对取消接口进行验证
-#取消接口验证完成
-def cancel(request):
-    if request.method == 'GET':
-        orderid=request.GET.get('orderid','')
-        order=Order.objects.get(orderid=orderid)
-        order.status=0
-        nowtime = timezone.now()
-        order.time6 = nowtime
-        order.save()
-        return JsonResponse({'success':True})
-#评论
-#验证成功
-def comment(request):
-    if request.method == 'GET':
-        orderid=request.GET.get('orderid','')
-        context=request.GET.get('context','')
-        order=Order.objects.get(orderid=orderid)
-        user=order.user
-        commentid=user.openid+order.period_id
-        judge=Comment.objects.filter(commentid=commentid).exists()
-        if judge:
-            comment1=Comment.objects.get(commentid=commentid)
-            comment1.context=context
-            comment1.save()
-        else:
-            commenModel=Comment(commentid=commentid,context=context,user=user,order=order,status=0, \
-                                production=order.production)
-            nowtime = timezone.now()
-            commenModel.save()
-            order.time5 = nowtime
-            order.comment=commenModel
-            order.save()
-        return JsonResponse({'success': True})
-#给定openid,teamid,
-#验证成功
+
+
 def buyalone(request):
     if request.method =='GET':
         openid = request.GET.get('openid', '')
@@ -262,9 +198,59 @@ def buytogether(request):
     else:
         return JsonResponse({'success': False, 'reason': '团队人数已满'})
 
+def order(request):
+    if request.method == 'GET':
+        openid = request.GET.get('openid', '')
+        order=Order.objects.filter(user_id=openid).values('production__merchant__logo','production__name', \
+                                                           'production__merchant__latitude', \
+                                                           'production__merchant__longitude', \
+                                                           'production__reputation','period__number','period__status', \
+                                                           'period__endtime', \
+                                                           'period__startprice','period__cutprice','steam_id')
+        order = serializer(order)
+        return JsonResponse(order)
+        #return  JsonResponse("true",safe=False)
+        # onecut=Steam.objects.filter(steamid=order.steam_id).values('steamid','order__user__picture','order__user__name', \
+        #                                                            'order__cutprice')
+        # twocut =Steam.objects.filter(steamid=order.steam_id).values('steamid','cutting__audience__picture', \
+        #                                                             'cutting__audience__name','cutting__cutprice')
+        # order=serializer(order)
+        # onecut=serializer(onecut)
+        # twocut=serializer(twocut)
+        # return JsonResponse({"period":order,'oncut':onecut,'twocut':twocut})
 
+def cancel(request):
+    if request.method == 'GET':
+        orderid=request.GET.get('orderid','')
+        order=Order.objects.get(orderid=orderid)
+        order.status=0
+        nowtime = timezone.now()
+        order.time6 = nowtime
+        order.save()
+        return JsonResponse({'success':True})
 
-#团队外成员砍价
+def comment(request):
+    if request.method == 'GET':
+        orderid=request.GET.get('orderid','')
+        context=request.GET.get('context','')
+        order=Order.objects.get(orderid=orderid)
+        user=order.user
+        commentid=user.openid+order.period_id
+        judge=Comment.objects.filter(commentid=commentid).exists()
+        if judge:
+            comment1=Comment.objects.get(commentid=commentid)
+            comment1.context=context
+            comment1.save()
+        else:
+            commenModel=Comment(commentid=commentid,context=context,user=user,order=order,status=0, \
+                                production=order.production)
+            nowtime = timezone.now()
+            commenModel.save()
+            order.time5 = nowtime
+            order.comment=commenModel
+            order.save()
+        return JsonResponse({'success': True})
+
 def cutprice(request):
     if request.method == 'GET':
         openid=request.GET.get('openid','')
