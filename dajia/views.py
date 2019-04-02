@@ -112,8 +112,7 @@ def home(request):
                                                                                'production__merchant__location',\
                                                                                'production__merchant__latitude', 'production__merchant__longitude', \
                                                                                'number','cutnumber','saveprie').all()
-
-        commentdata=Period.objects.filter(production__team_id=teamid,status=1).values( 'production__comment__commentid'
+        commentdata=Period.objects.filter(production__team_id=teamid,status=1).values( 'periodid','production__comment__commentid'
                                                                                ).all()
 
         maindata=serializer(maindata)
@@ -156,7 +155,7 @@ def scancomment(request):
 
 #查询订单细节
 #接口正常运行，细节的雕琢
-def order(request):
+def orderlist(request):
     if request.method == 'GET':
         openid = request.GET.get('openid', '')
         order=Order.objects.filter(user_id=openid).values('production__merchant__logo','production__name', \
@@ -165,14 +164,22 @@ def order(request):
                                                            'production__reputation','period__number','period__status', \
                                                            'period__endtime', \
                                                            'period__startprice','period__cutprice','steam_id')
-        onecut=Steam.objects.filter(steamid=order.steam_id).values('steamid','order__user__picture','order__user__name', \
-                                                                   'order__cutprice')
-        twocut =Steam.objects.filter(steamid=order.steam_id).values('steamid','cutting__audience__picture', \
-                                                                    'cutting__audience__name','cutting__cutprice')
+
         order=serializer(order)
-        onecut=serializer(onecut)
-        twocut=serializer(twocut)
-        return JsonResponse({"period":order,'oncut':onecut,'twocut':twocut})
+        return JsonResponse({"period":order})
+
+def orderdetail(request):
+    if request.method == 'GET':
+        steamid=request.GET.get('steamid','')
+        onecut = Steam.objects.filter(steamid=steamid).values('steamid', 'order__user__picture',
+                                                                     'order__user__name', \
+                                                                     'order__cutprice')
+        twocut = Steam.objects.filter(steamid=steamid).values('steamid', 'cutting__audience__picture', \
+                                                                     'cutting__audience__name', 'cutting__cutprice')
+        onecut = serializer(onecut)
+        twocut = serializer(twocut)
+        return JsonResponse({'oncut': onecut, 'twocut': twocut})
+
 #对取消接口进行验证
 #取消接口验证完成
 def cancel(request):
