@@ -7,7 +7,6 @@ admin.site.register(models.Order)
 admin.site.register(models.Period)
 admin.site.register(models.Comment)
 admin.site.register(models.Team)
-admin.site.register(models.Periodtoteam)
 admin.site.register(models.Cutting)
 admin.site.register(models.Steam)
 
