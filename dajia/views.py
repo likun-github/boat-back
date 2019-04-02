@@ -98,34 +98,36 @@ def verify(request):
             data=serializer(newuser)
             return JsonResponse(data)
 
-#首页认证
-#成功,返回当前类别砍价最多以及参团人数最多
+#home页boat组件的信息获取
+
 def home(request):
     if request.method == 'GET':
         pass
         teamid=request.GET.get('teamid','')
-        home=Period.objects.filter(production__team_id=teamid,status=1).values('periodid','production','endtime','type', \
-                                                                               'number')
-        home=serializer(home)
-        return JsonResponse(home)
+        maindata=Period.objects.filter(production__team_id=teamid,status=1).values('periodid','production','production__name','production__introduciton',\
+                                                                               'startprice','starttime','endtime','type', \
+                                                                               'production__merchant__location',\
+                                                                               'production__merchant__latitude', 'production__merchant__longitude', \
+                                                                               'number','cutnumber','saveprie').all()
 
-#开始测试第二页接口
-#给定teamid，type查询内容
+        commentdata=Period.objects.filter(production__team_id=teamid,status=1).values( 'production__comment__commentid'
+                                                                               ).all()
+
+        maindata=serializer(maindata)
+        commentdata = serializer(commentdata)
+        return JsonResponse({'success': True,'maindata':maindata,'commentdata':commentdata})
+
+#点击进入详情页，只需获取评论内容
+#给定评论id，返回评论详情
 #对datetime中用serializer库进行序列化用返回
 #成功
 def secondpage(request):
     if request.method == 'GET':
-        type=request.GET.get('type','')
-        teamid=request.GET.get('teamid','')
-        #选择最近的一期
-        nowtime=timezone.now()
         pass
-        # peroidtoteams=Periodtoteam.objects.filter(type=type,team_id=teamid,period__status=1).values( "period__periodid", \
-        #                                          "period__production__name","period__production__merchant__logo","period__production__merchant__latitude", \
-        #                                          "period__production__merchant__longitude","period__production__merchant__location","period__production__reputation", \
-        #                                         "period__startprice","maxcutprice","number","period__production__merchant__pic1")
-        # data=serializer(peroidtoteams)
-        # return JsonResponse({'success': True, 'data': data})
+        commentid = request.GET.get('commentid', '')
+        data=Comment.objects.filter(commentid=commentid).values( 'context','user__name','user__picture','time','status').all()
+        data=serializer(data)
+        return JsonResponse({'success': True, 'data': data})
 
 
 #详情页接口返回评论
@@ -138,6 +140,7 @@ def thirdpage(request):
                                                                                             "user__name","context","time").all()[0,5]
         comments=serializer(comments)
         return JsonResponse({'success': True, 'data': comments})
+
 def scancomment(request):
     if request.method == 'GET':
         number=request.GET.get('number','')
