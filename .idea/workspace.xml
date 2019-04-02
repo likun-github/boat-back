@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8b7f819-22c7-4f44-8bff-e8296afdc948" name="Default Changelist" comment="new">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dajia/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dajia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/dajia/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -68,14 +65,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1704" />
+          <entry key="py" value="1808" />
           <entry key="txt" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="11" />
-          <entry key="Python" value="1704" />
+          <entry key="Python" value="1808" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -130,14 +127,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dajia/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="38" column="10" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
+            <state relative-caret-position="288">
+              <caret line="90" column="70" lean-forward="true" selection-start-line="90" selection-start-column="70" selection-end-line="90" selection-end-column="70" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
-                <marker date="1554179515363" expanded="true" signature="733:1315" ph="..." />
-                <marker date="1554179515363" expanded="true" signature="2471:2510" ph="..." />
-                <marker date="1554179515363" expanded="true" signature="6558:7906" ph="..." />
-                <marker date="1554179515363" expanded="true" signature="11542:11545" ph="..." />
+                <marker date="1554180180978" expanded="true" signature="733:1302" ph="..." />
+                <marker date="1554180180978" expanded="true" signature="2471:2509" ph="..." />
+                <marker date="1554180180978" expanded="true" signature="6664:8012" ph="..." />
+                <marker date="1554180180978" expanded="true" signature="11648:11651" ph="..." />
               </folding>
             </state>
           </provider>
@@ -147,7 +144,7 @@
         <entry file="file://$PROJECT_DIR$/dajia/migrations/0001_initial.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="189">
-              <caret line="64" column="26" lean-forward="true" selection-start-line="64" selection-start-column="26" selection-end-line="64" selection-end-column="26" />
+              <caret line="64" column="26" selection-start-line="64" selection-start-column="26" selection-end-line="64" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -167,7 +164,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dajia/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2394">
+            <state relative-caret-position="1596">
               <caret line="132" column="72" selection-start-line="132" selection-start-column="72" selection-end-line="132" selection-end-column="72" />
               <folding>
                 <marker date="1554128873686" expanded="true" signature="55:393" ph="..." />
@@ -544,21 +541,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dajia/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2394">
-          <caret line="132" column="72" selection-start-line="132" selection-start-column="72" selection-end-line="132" selection-end-column="72" />
-          <folding>
-            <marker date="1554128873686" expanded="true" signature="55:393" ph="..." />
-            <marker date="1554128873686" expanded="true" signature="345:350" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dajia/migrations/0001_initial.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
-          <caret line="64" column="26" lean-forward="true" selection-start-line="64" selection-start-column="26" selection-end-line="64" selection-end-column="26" />
+          <caret line="64" column="26" selection-start-line="64" selection-start-column="26" selection-end-line="64" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -569,16 +555,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dajia/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1596">
+          <caret line="132" column="72" selection-start-line="132" selection-start-column="72" selection-end-line="132" selection-end-column="72" />
+          <folding>
+            <marker date="1554128873686" expanded="true" signature="55:393" ph="..." />
+            <marker date="1554128873686" expanded="true" signature="345:350" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dajia/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="38" column="10" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
+        <state relative-caret-position="288">
+          <caret line="90" column="70" lean-forward="true" selection-start-line="90" selection-start-column="70" selection-end-line="90" selection-end-column="70" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-            <marker date="1554179515363" expanded="true" signature="733:1315" ph="..." />
-            <marker date="1554179515363" expanded="true" signature="2471:2510" ph="..." />
-            <marker date="1554179515363" expanded="true" signature="6558:7906" ph="..." />
-            <marker date="1554179515363" expanded="true" signature="11542:11545" ph="..." />
+            <marker date="1554180180978" expanded="true" signature="733:1302" ph="..." />
+            <marker date="1554180180978" expanded="true" signature="2471:2509" ph="..." />
+            <marker date="1554180180978" expanded="true" signature="6664:8012" ph="..." />
+            <marker date="1554180180978" expanded="true" signature="11648:11651" ph="..." />
           </folding>
         </state>
       </provider>

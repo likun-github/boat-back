@@ -76,7 +76,6 @@ def login(request):
 
 
 
-
 #实名认证验证通过
 #未注册给定注册以及返回数据
 #已注册返回该账户已注册
@@ -93,10 +92,16 @@ def verify(request):
         if account:
             return JsonResponse("该账号已注册")
         else:
-            newuser = User(openid=openid, team=team,department=department,name=name, number=number, telephone=telephone,status=1)
-            newuser.save()
-            data=serializer(newuser)
-            return JsonResponse(data)
+            account = User.objects.get(openid=openid)
+            account.name = name
+            account.number = number
+            account.department = department
+            account.telephone = telephone
+            account.status = 1
+            account.team = team
+            account.save()
+            return JsonResponse("true")
+
 
 #首页认证
 #成功,返回当前类别砍价最多以及参团人数最多
