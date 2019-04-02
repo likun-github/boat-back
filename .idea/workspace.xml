@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8b7f819-22c7-4f44-8bff-e8296afdc948" name="Default Changelist" comment="new">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dajia/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/dajia/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dajia/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/dajia/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dajia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/dajia/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -96,12 +93,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dajia/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="211" column="9" selection-start-line="211" selection-start-column="9" selection-end-line="211" selection-end-column="9" />
+            <state relative-caret-position="382">
+              <caret line="127" column="31" selection-start-line="127" selection-start-column="31" selection-end-line="127" selection-end-column="31" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
-                <marker date="1554198287760" expanded="true" signature="721:940" ph="..." />
-                <marker date="1554198287760" expanded="true" signature="7612:9050" ph="..." />
+                <marker date="1554198576707" expanded="true" signature="721:940" ph="..." />
               </folding>
             </state>
           </provider>
@@ -137,8 +133,8 @@
             <state relative-caret-position="2527">
               <caret line="133" column="105" selection-start-line="133" selection-start-column="105" selection-end-line="133" selection-end-column="105" />
               <folding>
-                <marker date="1554195541539" expanded="true" signature="55:393" ph="..." />
-                <marker date="1554195541539" expanded="true" signature="345:350" ph="..." />
+                <marker date="1554198487271" expanded="true" signature="55:393" ph="..." />
+                <marker date="1554198487271" expanded="true" signature="345:350" ph="..." />
               </folding>
             </state>
           </provider>
@@ -488,12 +484,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dajia/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="211" column="9" selection-start-line="211" selection-start-column="9" selection-end-line="211" selection-end-column="9" />
+        <state relative-caret-position="382">
+          <caret line="127" column="31" selection-start-line="127" selection-start-column="31" selection-end-line="127" selection-end-column="31" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-            <marker date="1554198287760" expanded="true" signature="721:940" ph="..." />
-            <marker date="1554198287760" expanded="true" signature="7612:9050" ph="..." />
+            <marker date="1554198576707" expanded="true" signature="721:940" ph="..." />
           </folding>
         </state>
       </provider>
@@ -523,8 +518,8 @@
         <state relative-caret-position="2527">
           <caret line="133" column="105" selection-start-line="133" selection-start-column="105" selection-end-line="133" selection-end-column="105" />
           <folding>
-            <marker date="1554195541539" expanded="true" signature="55:393" ph="..." />
-            <marker date="1554195541539" expanded="true" signature="345:350" ph="..." />
+            <marker date="1554198487271" expanded="true" signature="55:393" ph="..." />
+            <marker date="1554198487271" expanded="true" signature="345:350" ph="..." />
           </folding>
         </state>
       </provider>

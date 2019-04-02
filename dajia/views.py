@@ -126,15 +126,11 @@ def home(request):
 #成功
 def secondpage(request):
     if request.method == 'GET':
-        pass
-<<<<<<< HEAD
         commentid = request.GET.get('commentid', '')
         data=Comment.objects.filter(commentid=commentid).values( 'context','user__name','user__picture','time','status').all()
         data=serializer(data)
         return JsonResponse({'success': True, 'data': data})
-=======
 
->>>>>>> 238759c0d4d3336f11a34ff8c4abf54eef1bc98b
 
 
 #详情页接口返回评论
