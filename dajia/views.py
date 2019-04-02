@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.utils import timezone
 import pytz
-
+import os
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.http import HttpResponse
@@ -35,10 +35,21 @@ def justtry(request):
 #登陆接口验证完成
 #给定code,如果为注册用户，返回用户信息
 #未注册，返回openid和默认teamid
+def handle_upload_file(file,filename):
+    path='userpic/'     #上传文件的保存路径，可以自己指定任意的路径
+    if not os.path.exists(path):
+        os.makedirs(path)
+    with open(path+filename,'wb+')as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    return path+filename
+
+@csrf_exempt
 def login(request):
-    if request.method == 'GET':
-        code = request.GET.get('code', '')
-        name=request.GET.get('name','')
+    if request.method == "POST":
+        pic = handle_upload_file(request.FILES['file'], str(request.FILES['file']))
+        code = request.POST.get('code')
+        name = request.POST.get('name')
         appid = 'wx2b21ee85de8b10a9'
         appSecret = 'e3ce059551daa9fdd4657a6445d2b265'
         data = {
@@ -47,21 +58,24 @@ def login(request):
             'js_code': code,
             'grant_type': 'authorization_code',
         }
-        url = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code" % (appid, appSecret, code)
+        url = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code" % (
+            appid, appSecret, code)
         r = requests.get(url=url)
         response = r.json()
-        print(response)
         openid = response['openid']
         account = User.objects.filter(openid=openid).exists()
         if account:
-            newaccount=User.objects.get(openid=openid)
-            back=serializer(newaccount)
+            newaccount = User.objects.get(openid=openid)
+            back = serializer(newaccount)
             return JsonResponse(back)
         else:
-            newaccount=User(openid=openid,name=name,status=0)
+            newaccount = User(openid=openid, name=name,picture=pic,status=0)
             newaccount.save()
             back = serializer(newaccount)
             return JsonResponse(back)
+
+
+
 
 #实名认证验证通过
 #未注册给定注册以及返回数据
