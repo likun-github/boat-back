@@ -22,7 +22,7 @@ import json
 import random
 import datetime
 import  time
-@csrf_exempt
+
 
 def justtry(request):
     if request.method == 'GET':
@@ -32,9 +32,7 @@ def justtry(request):
         order.save()
         return JsonResponse({'success': True,'data':timezone.now()})
 
-#登陆接口验证完成
-#给定code,如果为注册用户，返回用户信息
-#未注册，返回openid和默认teamid
+
 def handle_upload_file(file,filename):
     path='userpic/'     #上传文件的保存路径，可以自己指定任意的路径
     if not os.path.exists(path):
