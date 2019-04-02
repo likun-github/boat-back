@@ -38,7 +38,7 @@ def justtry(request):
 def login(request):
     if request.method == 'GET':
         code = request.GET.get('code', '')
-        name=request.GET.get('name','')
+
         appid = 'wx2b21ee85de8b10a9'
         appSecret = 'e3ce059551daa9fdd4657a6445d2b265'
         data = {
@@ -58,7 +58,7 @@ def login(request):
             back=serializer(newaccount)
             return JsonResponse(back)
         else:
-            newaccount=User(openid=openid,name=name,status=0)
+            newaccount=User(openid=openid,status=0)
             newaccount.save()
             back = serializer(newaccount)
             return JsonResponse(back)
@@ -89,11 +89,8 @@ def verify(request):
 def home(request):
     if request.method == 'GET':
         teamid=request.GET.get('teamid','')
-        home = Periodtoteam.objects.filter(team_id=teamid).values('type').annotate(sum=Sum('number'), max=Max('maxcutprice')).values("type", \
-                                                                                                                  'sum', \
-                                                                                                                  'max')
-        home=serializer(home)
-        return JsonResponse({'success': True,'data':home})
+
+        return JsonResponse({'success': True})
 
 #开始测试第二页接口
 #给定teamid，type查询内容
