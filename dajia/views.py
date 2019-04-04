@@ -5,7 +5,6 @@ import os
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.http import HttpResponse
-
 from django.db.models import Count
 from django.db.models import Max
 from django.db.models import Sum
@@ -25,11 +24,12 @@ import  time
 
 def justtry(request):
     if request.method == 'GET':
-        nowtime=timezone.now()
-        order=Order.objects.first()
-        order.time2=nowtime
-        order.save()
-        return JsonResponse({'success': True,'data':timezone.now()})
+        nowtime = timezone.now()
+        periods = Period.objects.filter(status=2, starttime__lte=nowtime).all()
+        for period in periods:
+            period.status = 1
+            period.save()
+        return JsonResponse({"success":True})
 
 
 def handle_upload_file(file,filename):

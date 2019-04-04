@@ -6,7 +6,7 @@ import datetime
 def checkstatus1():
     #现在时间
     nowtime = timezone.now()
-    periods = Period.objects.filter(status=2,starttime__gt=nowtime).all()
+    periods = Period.objects.filter(status=2,starttime__lte=nowtime).all()
     for period in periods:
         period.status=1
         period.save()
