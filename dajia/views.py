@@ -5,8 +5,7 @@ import os
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.http import HttpResponse
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+
 from django.db.models import Count
 from django.db.models import Max
 from django.db.models import Sum
@@ -112,36 +111,22 @@ def home(request):
                                                                                'production__merchant__location',\
                                                                                'production__merchant__latitude', 'production__merchant__longitude', \
                                                                                'number','cutnumber','saveprie').all()
-        commentdata=Period.objects.filter(production__team_id=teamid,status=1).values( 'periodid','production__comment__commentid'
-                                                                               ).all()
-
-        maindata=serializer(maindata)
-        commentdata = serializer(commentdata)
-        return JsonResponse({'success': True,'maindata':maindata,'commentdata':commentdata})
+        return JsonResponse(maindata)
 
 #点击进入详情页，只需获取评论内容
 #给定评论id，返回评论详情
 #对datetime中用serializer库进行序列化用返回
 #成功
-def secondpage(request):
+def firstcomment(request):
     if request.method == 'GET':
-        commentid = request.GET.get('commentid', '')
-        data=Comment.objects.filter(commentid=commentid).values( 'context','user__name','user__picture','time','status').all()
+        productionid = request.GET.get('productionid', '')
+        data=Comment.objects.filter(production_id=productionid,status=1).values( 'context','user__name','user__picture','time').all()[0:15]
         data=serializer(data)
         return JsonResponse({'success': True, 'data': data})
 
 
 
-#详情页接口返回评论
-#无足够评论信息，跳过
-def thirdpage(request):
-    if request.method == 'GET':
-        periodid=request.GET.get('periodid','')
-        period=Period.objects.get(periodid=periodid)
-        comments=Comment.objects.filter(production_id=period.production_id,status=1).values("user__team__logo", \
-                                                                                            "user__name","context","time").all()[0,5]
-        comments=serializer(comments)
-        return JsonResponse({'success': True, 'data': comments})
+
 
 def scancomment(request):
     if request.method == 'GET':
@@ -168,14 +153,15 @@ def orderlist(request):
         order=serializer(order)
         return JsonResponse({"period":order})
 
+
 def orderdetail(request):
     if request.method == 'GET':
-        steamid=request.GET.get('steamid','')
+        steamid = request.GET.get('steamid', '')
         onecut = Steam.objects.filter(steamid=steamid).values('steamid', 'order__user__picture',
-                                                                     'order__user__name', \
-                                                                     'order__cutprice')
+                                                              'order__user__name', \
+                                                              'order__cutprice')
         twocut = Steam.objects.filter(steamid=steamid).values('steamid', 'cutting__audience__picture', \
-                                                                     'cutting__audience__name', 'cutting__cutprice')
+                                                              'cutting__audience__name', 'cutting__cutprice')
         onecut = serializer(onecut)
         twocut = serializer(twocut)
         return JsonResponse({'oncut': onecut, 'twocut': twocut})
@@ -313,17 +299,7 @@ def cutprice(request):
 
 
 
-#触发器正常运行
-@receiver(post_save,sender=Period,dispatch_uid="period_save")
-def period_save(sender,**kwargs):
-    print("期表触发器正在运行")
 
-
-
-@receiver(post_save,sender=Team,dispatch_uid="team_save")
-def team_save(sender,**kwargs):
-    print(kwargs['instance'].teamid)
-    pass
 
 
 
