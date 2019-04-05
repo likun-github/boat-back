@@ -130,8 +130,8 @@ class Order(models.Model):
     time3 = models.DateTimeField(null=True, blank=True, verbose_name="支付完成时间")
     time4 = models.DateTimeField(null=True, blank=True, verbose_name="订单完成时间")
     time5 = models.DateTimeField(null=True, blank=True, verbose_name="评价完成时间")
-    time6 = models.DateTimeField(null=True, blank=True, verbose_name="订单取消时间")
-    comment=models.ForeignKey(Comment,on_delete=models.CASCADE,related_name="order")
+    time6=models.DateTimeField(null=True, blank=True, verbose_name="订单取消时间")
+    comment=models.ForeignKey(Comment,on_delete=models.CASCADE,related_name="order",null=True, blank=True)
 
 class Cutting(models.Model):
     cutid=models.CharField(primary_key=True,max_length=50,verbose_name="砍价编号")
